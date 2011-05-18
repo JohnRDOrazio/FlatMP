@@ -148,7 +148,7 @@ function main_page($mailbox,$modname,$myforum,$page,$datadir)
       echo "<div style=\"width:5%;\" class=\"mptable-header-element notthisone\"><input type=\"checkbox\" id=\"mpcheckall\"></div>";
       echo "<div class=\"mptable-header-element\"><button class='mp-button'><a href=\"JavaScript:location.reload();\">"._AGGIORNAMP."</a></button></div>";
       echo "<div class=\"mptable-header-element\"><button class='mp-button'><a href=\"index.php?mod=$modname&amp;op=mp_empty&amp;mailbox=$mailbox\" onclick=\"return confirm('"._SICUROTUTTIMP."')\">"._ELIMINATUTTIMP."</a></button></div>";
-      echo "<div class=\"mptable-header-element\" style=\"float:right;padding:3px;\"><a href=\"index.php?mod=$modname&amp;op=mp_optz\"><img alt='"._OPZIONI1MP."' src='images/mp/gear-29340234.png' /></a></div>";
+      echo "<div class=\"mptable-header-element\" style=\"float:right;padding:3px;\"><a href=\"index.php?mod=$modname&amp;op=mp_optz&amp;mailbox=$mailbox\"><img alt='"._OPZIONI1MP."' src='images/mp/gear-29340234.png' /></a></div>";
       //echo "<div class=\"mptable-header-element\">".substr(_RISPONDIMP, 0, 1)."</div>";
       //echo "<div class=\"mptable-header-element\">".substr(_INOLTRAMP, 0, 1)."</div>";
       //echo "<div class=\"mptable-header-element\">".substr(_ELIMINAMP, 0, 1)."</div>";    
@@ -254,7 +254,7 @@ function mp_optz($mailbox,$modname,$myforum,$datadir)
 		echo "<input type='submit' value="._MPSAVE.">";
 		echo "</form>";
 		echo "</div>";
-		echo "<img src=\"images/mp/back.png\" border=\"0\">&nbsp;<a href=\"index.php?mod=$modname\">"._INDIETROMP."</a>";
+		echo "<img src=\"images/mp/back.png\" border=\"0\">&nbsp;<a href=\"index.php?mod=$modname&amp;mailbox=$mailbox\">"._INDIETROMP."</a>";
 	}
 // funzione per inviare nuovo messaggio
 function mp_add($modname,$myforum)
