@@ -75,3 +75,7 @@
 .mex-click {
   cursor: pointer;
 }
+
+#mp-body {
+  min-width: 80%;
+}
