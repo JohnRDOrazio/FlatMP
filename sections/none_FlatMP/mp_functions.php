@@ -273,10 +273,10 @@ function mp_add($modname,$myforum)
 					document.getElementsByName('title')[0].focus();
 					return false;
 				}
-			if(document.getElementsByName('body')[0].value=='')
+			if(document.getElementsByName('mp-body')[0].value=='')
 				{
 					alert('<?php echo _MANCATESTOMP ?>');
-					document.getElementsByName('body')[0].focus();
+					document.getElementsByName('mp-body')[0].focus();
 					return false;
 				}
 			return true;
@@ -375,18 +375,18 @@ function mp_create($path,$id,$read,$sender,$recipient,$title,$body,$modname,$dat
 		$mail=get_xml_element("fm:mail",$string);
 		
 		if ($mail==1&&$read==0)
-			mp_sendmail($recipient,$sender); //invio notifica via mail
+			mp_sendmail($recipient,$sender,$title); //invio notifica via mail
 	}
 
 //funzione che invia notifica via mail
-function mp_sendmail($recipient,$sender)
+function mp_sendmail($recipient,$sender,$object)
 	{
 		global $_FN;
 		$uservalues = get_user($recipient);
 		$url="http://".$_SERVER['SERVER_NAME'];
 		$to=$uservalues['email'];
-		$message=$recipient._TESTO1MAIL.$sender._TESTO2MAIL.$url;
-		$object=_OGGETTOMAIL.$_FN['sitename'];
+		$message=$recipient." "._TESTO1MAIL." ".$sender." "._TESTO2MAIL." ".$url;
+		$object=_OGGETTOMAIL." ".$_FN['sitename'];
 		$from="FROM: ".$_FN['sitename']." <noreply@noreply>\r\nX-Mailer: Flatnux on PHP/".phpversion();
 		
 		mail($to,$object,$message,$from);
@@ -430,7 +430,7 @@ function mp_send($modname,$datadir)
 			$postArray=&$HTTP_POST_VARS;	// fino alla 4.1.0
 
 		$myid=time();   
-		$mybody = stripslashes($postArray['body']);
+		$mybody = stripslashes($postArray['mp-body']);
 		$mybody = str_replace("\n", "<br />", $mybody);
 		$mybody = tag2html($mybody, "home");
 
