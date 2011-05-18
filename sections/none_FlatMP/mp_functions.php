@@ -395,7 +395,7 @@ function mp_sendmail($recipient,$sender)
 // funzione che legge i messaggi
 function mp_read($id,$file,$modname,$mailbox)
 	{	
-		global $_FN;
+	global $_FN;
     $fuso_orario=$_FN['jet_lag'];
     $string=get_file($file);
 		$title=get_xml_element("fm:title",$string);
@@ -439,7 +439,7 @@ function mp_send($modname,$datadir)
 		$mysender = stripslashes(htmlspecialchars($postArray['sender']));
 		$myrecipient = stripslashes(htmlspecialchars($postArray['recipient']));
 
-		// se il titolo del messaggio è vuoto incorro in un errore
+		// se il titolo del messaggio ï¿½ vuoto incorro in un errore
 		if($mytitle == "")
 			{
 				echo "<br/>";
@@ -467,6 +467,8 @@ function mp_send($modname,$datadir)
 // funzione per rispondere ai messaggi
 function mp_reply($file,$modname,$myforum)
 	{
+		global $_FN;
+	    $fuso_orario=$_FN['jet_lag'];
 		$fp=fopen($file,"r"); // apro il file a cui rispondere in sola lettura
 
 		$string=fread($fp,filesize($file));
@@ -493,6 +495,8 @@ function mp_reply($file,$modname,$myforum)
 // funzione per inoltrare i messaggi
 function mp_forward($file,$modname,$myforum)
 	{
+		global $_FN;
+	    $fuso_orario=$_FN['jet_lag'];
 		$fp=fopen($file,"r"); // apro il file da inoltrare in sola lettura
 
 		$string=fread($fp,filesize($file));
