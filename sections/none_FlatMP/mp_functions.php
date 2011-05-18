@@ -36,13 +36,14 @@ function mp_count($myforum,$datadir)
 		return($mp);
 	}
 // funzione che modifica il file delle opzioni
-function mp_optz_MPSAVE($modname,$myforum,$datadir)
+function mp_optz_save($modname,$myforum,$datadir)
 	{
 		$fp=fopen("$datadir/mailboxes/$myforum/mp_config.php","w");
 
 		fwrite($fp,"<"."?xml version='1.0' ?".">
 <fm:options>
 	<fm:mail>".$_POST['mail']."</fm:mail>
+  <fm:mexpp>".$_POST['mexpp']."</fm:mexpp>
 </fm:options>");
 		fclose($fp);
 		
@@ -110,14 +111,19 @@ function main_page($mailbox,$modname,$myforum,$page,$datadir)
 		rsort($modlist);
 		
 		// Calcolo il numero di pagine
-		$num_mp=25;  // 25 messaggi per pagina
+		if (!file_exists("$datadir/mailboxes/{$_FN['user']}/mp_config.php"))
+			mp_config($_FN['user'],$modname,$datadir);
+		
+		$string=get_file("$datadir/mailboxes/{$_FN['user']}/mp_config.php");
+		$num_mp=get_xml_element("fm:mexpp",$string);
+		
 		$tot_mp=sizeof($modlist);  // ho dovuto correggere, altrimenti se sizeof($modlist)=1, then $tot_mp = 0!; 
 		$modulo=0;
 		if(($tot_mp%$num_mp)>0)
 			$modulo=1;
 		$pages=intval($tot_mp/$num_mp)+$modulo;
 		$a = $page*$num_mp;
-        $b = $a-($num_mp-1);
+    $b = $a-($num_mp-1);
     if($page==$pages){ $a=$tot_mp; }    
     $mexstr = "<span style='font-weight:bold;'>".$b." - ".$a."</span> of <span style='font-weight:bold;'>".$tot_mp."</span>";
     $pagstr = "<span>Page ".$page." of ".$pages." </span>";
@@ -229,7 +235,8 @@ function mp_optz($mailbox,$modname,$myforum,$datadir)
 		$string=get_file("$datadir/mailboxes/$myforum/mp_config.php");
 		
 		$mail=get_xml_element("fm:mail",$string);
-		
+    $mexpp=get_xml_element("fm:mexpp",$string);
+    		
 		if ($mail==1)
 			{
 				$check_mail1="checked='checked'";
@@ -242,15 +249,15 @@ function mp_optz($mailbox,$modname,$myforum,$datadir)
 			}
 
 		echo "<div style='padding:20px;'>";
-		echo "<form name='mp_config_MPSAVE' method='post' action='index.php?mod=".$modname."&amp;op=mp_optz_MPSAVE'>";
+		echo "<form name='mp_config_MPSAVE' method='post' action='index.php?mod=".$modname."&amp;op=mp_optz_save'>";
     echo "<fieldset>";
 		echo "<legend>"._OPZIONI2MP."</legend>";
 		echo "<span>"._OPTMAIL."</span><br />";
     echo "<label for='mailyes'>"._MPYES."</label><input id='mailyes' name='mail' type='radio' value='1' ".$check_mail1.">";
 		echo "<label for='mailno'>"._MPNO."</label><input id='mailno' name='mail' type='radio' value='0' ".$check_mail0.">";
 		echo "<br /><br />";
-    echo "<label for='mexpp'>Messaggi per pagina: </label><input id='mexpp' name='mexpp' value='25' type='number' min='2' />";
-		echo "</fieldset>";
+    echo "<label for='mexpp'>Messaggi per pagina: </label><input id='mexpp' name='mexpp' value='$mexpp' type='number' min='2' />";
+    echo "</fieldset>";
 		echo "<input type='submit' value="._MPSAVE.">";
 		echo "</form>";
 		echo "</div>";
@@ -397,7 +404,7 @@ function mp_sendmail($recipient,$sender,$object)
 // funzione che legge i messaggi
 function mp_read($id,$file,$modname,$mailbox)
 	{	
-	global $_FN;
+		global $_FN;
     $fuso_orario=$_FN['jet_lag'];
     $string=get_file($file);
 		$title=get_xml_element("fm:title",$string);
@@ -441,7 +448,7 @@ function mp_send($modname,$datadir)
 		$mysender = stripslashes(htmlspecialchars($postArray['sender']));
 		$myrecipient = stripslashes(htmlspecialchars($postArray['recipient']));
 
-		// se il titolo del messaggio � vuoto incorro in un errore
+		// se il titolo del messaggio è vuoto incorro in un errore
 		if($mytitle == "")
 			{
 				echo "<br/>";
@@ -470,7 +477,7 @@ function mp_send($modname,$datadir)
 function mp_reply($file,$modname,$myforum)
 	{
 		global $_FN;
-	    $fuso_orario=$_FN['jet_lag'];
+    $fuso_orario=$_FN['jet_lag'];
 		$fp=fopen($file,"r"); // apro il file a cui rispondere in sola lettura
 
 		$string=fread($fp,filesize($file));
@@ -482,7 +489,7 @@ function mp_reply($file,$modname,$myforum)
 		$recipient=$myforum;
 		$body=get_xml_element("fm:body",$string);
 		$id=$_GET['id'];
-		$data=$giorni[date("w",$id+(3600*$fuso_orario))].date("d",$id+(3600*$fuso_orario))."/".date("m",$id+(3600*$fuso_orario))."/".date("Y - ",$id+(3600*$fuso_orario)).date("H:",$id+(3600*$fuso_orario)).date("i",$id+(3600*$fuso_orario));
+		$data=date("d",$id+(3600*$fuso_orario))."/".date("m",$id+(3600*$fuso_orario))."/".date("Y - ",$id+(3600*$fuso_orario)).date("H:",$id+(3600*$fuso_orario)).date("i",$id+(3600*$fuso_orario));
 
 		// impedisco si crei una serie di re:re:re: 
 		$title=str_replace("re: ","",$title);
@@ -498,7 +505,7 @@ function mp_reply($file,$modname,$myforum)
 function mp_forward($file,$modname,$myforum)
 	{
 		global $_FN;
-	    $fuso_orario=$_FN['jet_lag'];
+    $fuso_orario=$_FN['jet_lag'];
 		$fp=fopen($file,"r"); // apro il file da inoltrare in sola lettura
 
 		$string=fread($fp,filesize($file));
@@ -510,7 +517,7 @@ function mp_forward($file,$modname,$myforum)
 		$recipient=$myforum;
 		$body=get_xml_element("fm:body",$string);
 		$id=$_GET['id'];
-		$data=$giorni[date("w",$id+(3600*$fuso_orario))].date("d",$id+(3600*$fuso_orario))."/".date("m",$id+(3600*$fuso_orario))."/".date("Y - ",$id+(3600*$fuso_orario)).date("H:",$id+(3600*$fuso_orario)).date("i",$id+(3600*$fuso_orario));
+		$data=date("d",$id+(3600*$fuso_orario))."/".date("m",$id+(3600*$fuso_orario))."/".date("Y - ",$id+(3600*$fuso_orario)).date("H:",$id+(3600*$fuso_orario)).date("i",$id+(3600*$fuso_orario));
 
 		// impedisco si crei una serie di i:i:i: 
 		$title=str_replace("i: ","",$title);
