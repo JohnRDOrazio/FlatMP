@@ -130,13 +130,13 @@ function main_page($mailbox,$modname,$myforum,$page,$datadir)
 
  		if($mailbox=="Inbox"){
 			echo "<div id='mp-mailboxtitle'>"._RICEVUTIMP."</div>";
-      $inbox = "<span style='color:#000000;font-weight:bold;'>"._RICEVUTIMP."</span><span style='font-weight:bold;'> (".$tot_mp.")</span>";
+      $inbox = "<span style='color:#000000;font-weight:bold;'>"._RICEVUTIMP."</span><span style='font-weight:bold;'> (".mp_count($_FN['user'],$_FN['datadir']).")</span>";
       $outbox = "<a href=\"index.php?mod=".$modname."&amp;mailbox=Outbox\" style='color:#FFFFFF;font-weight:bold;'>"._INVIATIMP."</a>";
       }
 		else{
 			echo "<div id='mp-mailboxtitle'>"._INVIATIMP."</div>";
       $inbox = "<a href=\"index.php?mod=".$modname."&amp;mailbox=Inbox\" style='color:#FFFFFF;font-weight:bold;'>"._RICEVUTIMP."</a>";
-      $outbox = "<span style='color:#000000;font-weight:bold;'>"._INVIATIMP."</span><span style='font-weight:bold;'> (".$tot_mp.")</span>";
+      $outbox = "<span style='color:#000000;font-weight:bold;'>"._INVIATIMP."</span>";
       }
 ?>
 <div id="mp-wrap">
@@ -388,14 +388,14 @@ function mp_create($path,$id,$read,$sender,$recipient,$title,$body,$modname,$dat
 	}
 
 //funzione che invia notifica via mail
-function mp_sendmail($recipient,$sender,$object)
+function mp_sendmail($recipient,$sender,$title)
 	{
 		global $_FN;
 		$uservalues = get_user($recipient);
 		$url="http://".$_SERVER['SERVER_NAME'];
 		$to=$uservalues['email'];
 		$message=$recipient." "._TESTO1MAIL." ".$sender." "._TESTO2MAIL." ".$url;
-		$object=_OGGETTOMAIL." ".$_FN['sitename'];
+		$object=_OGGETTOMAIL.": ".$title." ".$_FN['sitename'];
 		$from="FROM: ".$_FN['sitename']." <noreply@noreply>\r\nX-Mailer: Flatnux on PHP/".phpversion();
 		
 		mail($to,$object,$message,$from);
