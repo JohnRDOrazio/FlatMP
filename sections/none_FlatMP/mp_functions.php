@@ -117,7 +117,7 @@ function main_page($mailbox,$modname,$myforum,$page,$datadir)
 			$modulo=1;
 		$pages=intval($tot_mp/$num_mp)+$modulo;
 		$a = $page*$num_mp;
-    $b = $a-24;
+        $b = $a-($num_mp-1);
     if($page==$pages){ $a=$tot_mp; }    
     $mexstr = "<span style='font-weight:bold;'>".$b." - ".$a."</span> of <span style='font-weight:bold;'>".$tot_mp."</span>";
     $pagstr = "<span>Page ".$page." of ".$pages." </span>";
@@ -439,7 +439,7 @@ function mp_send($modname,$datadir)
 		$mysender = stripslashes(htmlspecialchars($postArray['sender']));
 		$myrecipient = stripslashes(htmlspecialchars($postArray['recipient']));
 
-		// se il titolo del messaggio è vuoto incorro in un errore
+		// se il titolo del messaggio ï¿½ vuoto incorro in un errore
 		if($mytitle == "")
 			{
 				echo "<br/>";
