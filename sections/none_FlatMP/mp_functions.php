@@ -382,7 +382,7 @@ function mp_create($path,$id,$read,$sender,$recipient,$title,$body,$modname,$dat
 function mp_sendmail($recipient,$sender)
 	{
 		global $_FN;
-		$uservalues = get_user($_FN['user']);
+		$uservalues = get_user($recipient);
 		$url="http://".$_SERVER['SERVER_NAME'];
 		$to=$uservalues['email'];
 		$message=$recipient._TESTO1MAIL.$sender._TESTO2MAIL.$url;
