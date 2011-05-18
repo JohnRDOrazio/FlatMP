@@ -327,8 +327,8 @@ function mp_fill($modname,$myforum,$rec,$obj,$txt)
 						<br />
 						<?
 							bbcodes_js();
-              bbcodes_panel("body","formatting"); echo "<br />";
-							bbcodes_panel("body","emoticons"); echo "<br />";
+              bbcodes_panel("mp-body","formatting"); echo "<br />";
+							bbcodes_panel("mp-body","emoticons"); echo "<br />";
 						 ?>
 					</td>
 				</tr>		
@@ -337,7 +337,7 @@ function mp_fill($modname,$myforum,$rec,$obj,$txt)
 						<div align="right"><strong><?php echo _TESTOMP ?>:</strong></div>
 					</td>
 					<td>
-						<textarea name="body" rows="7"><?php echo $txt ?></textarea></td>
+						<textarea id="mp-body" name="mp-body" rows="7"><?php echo $txt ?></textarea></td>
 				</tr>
 				<tr>
 					<td>
