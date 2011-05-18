@@ -248,6 +248,8 @@ function mp_optz($mailbox,$modname,$myforum,$datadir)
 		echo "<span>"._OPTMAIL."</span><br />";
     echo "<label for='mailyes'>"._MPYES."</label><input id='mailyes' name='mail' type='radio' value='1' ".$check_mail1.">";
 		echo "<label for='mailno'>"._MPNO."</label><input id='mailno' name='mail' type='radio' value='0' ".$check_mail0.">";
+		echo "<br /><br />";
+    echo "<label for='mexpp'>Messaggi per pagina: </label><input id='mexpp' name='mexpp' value='25' type='number' min='2' />";
 		echo "</fieldset>";
 		echo "<input type='submit' value="._MPSAVE.">";
 		echo "</form>";
