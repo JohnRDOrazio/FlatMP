@@ -124,7 +124,7 @@ $(document).ready(function(){
   rightboxwidth = $("#mp-mailboxtitle").width() - $("#mp-left-col").width();
   $("#mp-right-col").css({width:rightboxwidth});
   // set width of right column on every window resize
-  $("#mp-mailboxtitle").resize(function(){
+  $(window).resize(function(){
     rightboxwidth = $("#mp-mailboxtitle").width() - $("#mp-left-col").width();
     $("#mp-right-col").css({width:rightboxwidth});
   });
