@@ -2,3 +2,4 @@
 <fm:options>
 	<fm:mail>1</fm:mail>
 </fm:options>
+test
