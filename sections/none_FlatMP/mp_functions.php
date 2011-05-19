@@ -143,7 +143,7 @@ function main_page($mailbox,$modname,$myforum,$page,$datadir)
   <div id="mp-left-col">
 <?php 
   echo "<div class='mp-left-col-menu-item' style='height:60px;'></div>";
-  echo "<div class='mp-left-col-menu-item'><button class='mp-button' onclick='location.href=\"index.php?mod=$modname&amp;op=mp_add\"'>"._INVIAMP."</button></div>";
+  echo "<div class='mp-left-col-menu-item'><button class='mp-button' onclick='location.href=\"index.php?mod=$modname&amp;op=mp_add&amp;mailbox=$mailbox\"'>"._INVIAMP."</button></div>";
   echo "<div class='mp-left-col-menu-item ".(($mailbox=="Inbox") ? "mp-menu-item-selected" : "" )."'>".$inbox."</div>";
   echo "<div class='mp-left-col-menu-item ".(($mailbox=="Outbox") ? "mp-menu-item-selected" : "" )."'>".$outbox."</div>";
 ?>
@@ -264,12 +264,12 @@ function mp_optz($mailbox,$modname,$myforum,$datadir)
 		echo "<img src=\"images/mp/back.png\" border=\"0\">&nbsp;<a href=\"index.php?mod=$modname&amp;mailbox=$mailbox\">"._INDIETROMP."</a>";
 	}
 // funzione per inviare nuovo messaggio
-function mp_add($modname,$myforum)
+function mp_add($modname,$myforum,$mailbox)
 	{
 		$rec="list";
 		$obj="";
 		$txt="";
-		mp_fill($modname,$myforum,$rec,$obj,$txt);
+		mp_fill($modname,$myforum,$rec,$obj,$txt,$mailbox);
 	}
 // funzione (javascript) che controlla che titolo e corpo messaggio non siano vuoti
  ?>
@@ -293,7 +293,7 @@ function mp_add($modname,$myforum)
 </script>
 <?
 // funzione per compilare il messaggio
-function mp_fill($modname,$myforum,$rec,$obj,$txt)
+function mp_fill($modname,$myforum,$rec,$obj,$txt,$mailbox)
 	{
 		if($rec=="list")
 			$rec="<select name=\"recipient\" onChange=\"MM_jumpMenu('parent',this,0)\">".users_list()."</select>";
@@ -303,7 +303,7 @@ function mp_fill($modname,$myforum,$rec,$obj,$txt)
 		if($txt!="")
 			$txt="&#xD;&#xD;&#xD;--------------------------------------------------------------------&#xD;$txt";
 		 ?>
-		<form name="mp_send" method="post" action="index.php?mod=<?php echo $modname ?>&amp;op=mp_send" onsubmit="return validate();">
+		<form name="mp_send" method="post" action="index.php?mod=<?php echo $modname ?>&amp;op=mp_send&amp;mailbox=<?php echo $mailbox ?>" onsubmit="return validate();">
 			<table width="100%" border="0">
 				<tr>
 					<td width="15%">
@@ -358,7 +358,7 @@ function mp_fill($modname,$myforum,$rec,$obj,$txt)
 			</table>
 		</form>
 		<?php
-		echo "<img src=\"images/mp/back.png\" border=\"0\">&nbsp;<a href=\"index.php?mod=$modname\">"._INDIETROMP."</a>";
+		echo "<img src=\"images/mp/back.png\" border=\"0\">&nbsp;<a href=\"index.php?mod=$modname&amp;mailbox=$mailbox\">"._INDIETROMP."</a>";
 	}
 
 // funzione che crea i messaggi
@@ -424,14 +424,14 @@ function mp_read($id,$file,$modname,$mailbox)
 		echo _DAMP." <a href=\"index.php?mod=login&user=$sender\"><b>$sender</b></a> ".$data." </div><br />";
 
 		// indietro - rispondi - inoltra - elimina
-		echo "<img src=\"images/mp/back.png\" border=\"0\">&nbsp;<a href=\"index.php?mod=$modname\">"._INDIETROMP."</a>&nbsp;&nbsp;";
+		echo "<img src=\"images/mp/back.png\" border=\"0\">&nbsp;<a href=\"index.php?mod=$modname&amp;mailbox=$mailbox\">"._INDIETROMP."</a>&nbsp;&nbsp;";
 		echo "<img src=\"images/mp/reply.png\" border=\"0\">&nbsp;<a href=\"index.php?mod=$modname&amp;op=mp_reply&amp;id=$id&amp;mailbox=$mailbox\">"._RISPONDIMP."</a>&nbsp;&nbsp;";
 		echo "<img src=\"images/mp/forward.png\" border=\"0\">&nbsp;<a href=\"index.php?mod=$modname&amp;op=mp_forward&amp;id=$id&amp;mailbox=$mailbox\">"._INOLTRAMP."</a>&nbsp;&nbsp;";
 		echo "<img src=\"images/mp/delete.png\" border=\"0\">&nbsp;<a href=\"index.php?mod=$modname&amp;op=mp_delete&amp;id=$id&amp;mailbox=$mailbox\" onclick=\"return confirm('"._SICURO1MP."')\">"._ELIMINAMP."</a>";
 	}
 	
 // funzione per inviare i messaggi
-function mp_send($modname,$datadir)
+function mp_send($modname,$datadir,$mailbox)
 	{
 		if(isset($_POST))
 			$postArray=&$_POST;				// a partire dalla 4.1.0
@@ -452,7 +452,7 @@ function mp_send($modname,$datadir)
 		if($mytitle == "")
 			{
 				echo "<br/>";
-				echo _MANCAOGGETTOMP."<br/><br/><img src=\"images/mp/back.png\" border=\"0\">&nbsp;<a href=\"index.php?mod=$modname\">"._INDIETROMP."</a><br /><br />";
+				echo _MANCAOGGETTOMP."<br/><br/><img src=\"images/mp/back.png\" border=\"0\">&nbsp;<a href=\"index.php?mod=$modname&mailbox=$mailbox\">"._INDIETROMP."</a><br /><br />";
 			}
 		else
 			{
@@ -469,12 +469,12 @@ function mp_send($modname,$datadir)
 				echo "<br /><b>"._HOINVIATOMP." $myrecipient</b>";
 				echo "<br /><br /><br /><b>"._ASPETTAMP."</b>";
 				$time=1;
-				header("Refresh:".$time.";URL=index.php?mod=$modname&mailbox=Outbox");
+				header("Refresh:".$time.";URL=index.php?mod=$modname&mailbox=$mailbox");
 			}
 	}
 
 // funzione per rispondere ai messaggi
-function mp_reply($file,$modname,$myforum)
+function mp_reply($file,$modname,$myforum,$mailbox)
 	{
 		global $_FN;
     $fuso_orario=$_FN['jet_lag'];
@@ -498,7 +498,7 @@ function mp_reply($file,$modname,$myforum)
 		$obj="re: $title";
 		$txt="$sender $data&#xD;&#xD;$body&#xD;";
 		
-		mp_fill($modname,$myforum,$rec,$obj,$txt);
+		mp_fill($modname,$myforum,$rec,$obj,$txt,$mailbox);
 	}
 
 // funzione per inoltrare i messaggi
@@ -526,7 +526,7 @@ function mp_forward($file,$modname,$myforum)
 		$obj="i: $title";
 		$txt="$sender $data&#xD;&#xD;$body&#xD;";
 		
-		mp_fill($modname,$myforum,$rec,$obj,$txt);
+		mp_fill($modname,$myforum,$rec,$obj,$txt,$mailbox);
 	}
 	
 // funzione che cancella un singolo messaggio
@@ -600,7 +600,7 @@ function cp_fill($modname,$myforum)
 			</table>
 		</form>
 		<?php
-		echo "<br /><br /><img src=\"images/mp/back.png\" border=\"0\">&nbsp;<a href=\"index.php?mod=$modname\">"._INDIETROMP."</a>";
+		echo "<br /><br /><img src=\"images/mp/back.png\" border=\"0\">&nbsp;<a href=\"index.php?mod=$modname&amp;mailbox=$mailbox\">"._INDIETROMP."</a>";
 	}
 // funzione che crea la cartella personale (incoming..)
 function cp_create($modname,$myforum,$folder,$datadir)
