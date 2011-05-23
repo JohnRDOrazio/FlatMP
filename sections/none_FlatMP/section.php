@@ -106,7 +106,7 @@ break; // end mp_optz_save
 
 case "mp_add":
  
-mp_add($_FN['vmod'],$_FN['user']); // inserisce un nuovo messaggio
+mp_add($_FN['vmod'],$_FN['user'],$mailbox); // inserisce un nuovo messaggio
 
 break; // end mp_add
 
@@ -116,7 +116,7 @@ break; // end mp_add
 
 case "mp_send":
 
-mp_send($_FN['vmod'],$_FN['datadir']); // invia un messaggio
+mp_send($_FN['vmod'],$_FN['datadir'],$mailbox); // invia un messaggio
 	
 break; // end mp_send
 
@@ -126,7 +126,7 @@ break; // end mp_send
 
 case "mp_reply":
 
-mp_reply($file,$_FN['vmod'],$_FN['user']); // risponde ad messaggio
+mp_reply($file,$_FN['vmod'],$_FN['user'],$mailbox); // risponde ad messaggio
 
 break; // end mp_reply
 
@@ -136,7 +136,7 @@ break; // end mp_reply
 
 case "mp_forward":
 
-mp_forward($file,$_FN['vmod'],$_FN['user']); // inoltra un messaggio
+mp_forward($file,$_FN['vmod'],$_FN['user'],$mailbox); // inoltra un messaggio
 
 break; // end mp_forward
 
@@ -156,7 +156,7 @@ break; // end mp_read
 
 case "mp_delete":
 
-mp_delete($file,$_FN['vmod']); // cancella un messaggio
+mp_delete($file,$_FN['vmod'],$mailbox); // cancella un messaggio
 
 break; // end mp_delete
 
@@ -166,7 +166,7 @@ break; // end mp_delete
 
 case "mp_empty":
 
-mp_empty($folder,$_FN['vmod']); // cancella tutti i messaggi di una cartella
+mp_empty($folder,$_FN['vmod'],$mailbox); // cancella tutti i messaggi di una cartella
 
 break; // end mp_empty
 
