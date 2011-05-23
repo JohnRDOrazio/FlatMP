@@ -18,6 +18,7 @@
 
 #mp-wrap {
   float:left;
+  width: 100%;
 }
 
 
@@ -37,7 +38,9 @@
 
 #mp-right-col {
   float:left;
-  border: 5px solid #99CCFF;
+  border-style: solid;
+  border-color: #99CCFF;
+  border-width: 5px;
   background-color: #99CCFF;
 }
 .mex-line td {
@@ -78,4 +81,8 @@
 
 #mp-body {
   min-width: 80%;
+}
+
+.dc-selected td {
+  background-color: #CFF;
 }
