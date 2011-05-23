@@ -393,11 +393,11 @@ function mp_sendmail($recipient,$sender,$title)
 	{
 		global $_FN;
 		$uservalues = get_user($recipient);
-		$url="http://".$_SERVER['SERVER_NAME'];
+		$url=$_FN["siteurl"]."index.php?mod=FlatMP";
 		$to=$uservalues['email'];
-		$message=$recipient." "._TESTO1MAIL." ".$sender." "._TESTO2MAIL." ".$url;
-		$object=_OGGETTOMAIL.": ".$title." ".$_FN['sitename'];
-		$from="FROM: ".$_FN['sitename']." <noreply@noreply>\r\nX-Mailer: Flatnux on PHP/".phpversion();
+		$message=$recipient." "._TESTO1MAIL." ".$sender.": ".$title._TESTO2MAIL." ".$url;
+		$object=_OGGETTOMAIL.$_FN['sitename'];
+		$from="FROM: '".$_FN['sitename']."' <noreply@noreply>\r\nX-Mailer: Flatnux on PHP/".phpversion();
 		
 		mail($to,$object,$message,$from);
 	}
