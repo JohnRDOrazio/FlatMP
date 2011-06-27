@@ -40,11 +40,7 @@ function mp_optz_save($modname,$myforum,$datadir)
 	{
 		$fp=fopen("$datadir/mailboxes/$myforum/mp_config.php","w");
 
-		fwrite($fp,"<"."?xml version='1.0' ?".">
-<fm:options>
-	<fm:mail>".$_POST['mail']."</fm:mail>
-  <fm:mexpp>".$_POST['mexpp']."</fm:mexpp>
-</fm:options>");
+		fwrite($fp,"<"."?php /n header('content-type: text/xml'); /n exit(0); /n ?"."> /n <"."<"."??".">?xml version=\"1.0\" encoding=\"UTF-8\"?"."> /n <fm:options> /n   <fm:mail>".$_POST["mail"]."</fm:mail> /n   <fm:mexpp>".$_POST["mexpp"]."</fm:mexpp> /n </fm:options>";);
 		fclose($fp);
 		
 		echo "<br /><br /><br /><b>"._ASPETTAMP."</b>";
@@ -54,7 +50,9 @@ function mp_optz_save($modname,$myforum,$datadir)
 // funzione che crea il file delle opzioni
 function mp_config($myforum,$section,$datadir)
 	{
-		copy("sections/$section/mp_config.php","$datadir/mailboxes/$myforum/mp_config.php");
+		$fp=fopen("$datadir/mailboxes/$myforum/mp_config.php","w");
+		fwrite($fp,"<"."?php /n header('content-type: text/xml'); /n exit(0); /n ?"."> /n <"."<"."??".">?xml version=\"1.0\" encoding=\"UTF-8\"?"."> /n <fm:options> /n   <fm:mail>1</fm:mail> /n   <fm:mexpp>25</fm:mexpp> /n </fm:options>";);
+		fclose($fp);		
 	}
 // funzione che crea il messaggio di benvenuto, le cartelle utente e il file delle opzioni
 function mp_first($myforum,$admin,$section,$datadir)
